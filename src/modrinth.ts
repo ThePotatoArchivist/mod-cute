@@ -35,3 +35,7 @@ export function getProjects(facets: Facets, limit: number | undefined = undefine
         facets: compileFacets(facets),
     })
 }
+
+export async function getRandomProject(facets: Facets, count: number) {
+    return (await getProjects(facets, 1, Math.floor(Math.random() * count))).hits[0]
+}

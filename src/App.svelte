@@ -2,13 +2,24 @@
     import type { SearchResultHit } from '@xmcl/modrinth';
     import FilterControls from './FilterControls.svelte';
     import { compileFacets, type Facets } from './lib/modrinth/facets';
-    import { getProjects, TAGS } from './modrinth';
+    import { getProjectCount, getRandomProject, TAGS } from './modrinth';
     
     let facets: Facets = []
     
-    let projects: SearchResultHit[] = []
+    let rolling = false
+    let project: SearchResultHit | undefined
     
-    $: getProjects(facets, 10).then(result => projects = result.hits)
+    $: count = getProjectCount(facets)
+    
+    async function roll(count: number) {
+        if (rolling) return
+        rolling = true
+        project = await getRandomProject(facets, count)
+        rolling = false
+    }
+    
+    $: count.then(roll)
+    
 </script>
 
 <main>
@@ -19,10 +30,13 @@
     {/await}
     
     {compileFacets(facets)}
-    
-    {#each projects as project}
-        <div><a href="https://modrinth.com/project/{project.project_id}">{project.title}</a></div>
-    {/each}
+
+    <div>
+        <button on:click={() => count.then(roll)}>Next</button>
+        {#if project !== undefined}
+            <a href="https://modrinth.com/project/{project.project_id}">{project.title}</a>
+        {/if}
+    </div>
 </main>
 
 <style>
