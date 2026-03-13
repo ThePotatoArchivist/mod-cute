@@ -100,7 +100,7 @@
         </label>
         
         <select multiple bind:value={selectedVersions}>
-            {#each relevantVersions as version}
+            {#each relevantVersions as version (version)}
                 <option value={version}>{version.version}</option>
             {/each}
         </select>
