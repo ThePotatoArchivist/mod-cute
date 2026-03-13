@@ -1,4 +1,4 @@
-import { ModrinthV2Client } from '@xmcl/modrinth'
+import { ModrinthV2Client, type SearchResult } from '@xmcl/modrinth'
 import { getProjectTypeTags, getSideTypeTags } from './lib/modrinth/tags'
 import { type Facets, compileFacets } from './lib/modrinth/facets'
 
@@ -26,4 +26,12 @@ export async function getProjectCount(facets: Facets): Promise<number> {
         facets: compileFacets(facets),
         limit: 0,
     })).total_hits
+}
+
+export function getProjects(facets: Facets, limit: number | undefined = undefined, offset: number | undefined = undefined): Promise<SearchResult> {
+    return modrinth.searchProjects({
+        limit,
+        offset,
+        facets: compileFacets(facets),
+    })
 }

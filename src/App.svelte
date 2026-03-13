@@ -1,9 +1,16 @@
 <script lang="ts">
+    import type { SearchResultHit } from '@xmcl/modrinth';
     import FilterControls from './FilterControls.svelte';
     import { compileFacets, type Facets } from './lib/modrinth/facets';
-    import { TAGS } from './modrinth';
+    import { getProjects, TAGS } from './modrinth';
     
     let facets: Facets = []
+    
+    let projects: SearchResultHit[] = []
+    
+    $: {
+        getProjects(facets, 10).then(result => projects = result.hits)
+    }
 </script>
 
 <main>
@@ -14,6 +21,10 @@
     {/await}
     
     {compileFacets(facets)}
+    
+    {#each projects as project}
+        <div>{project.title}</div>
+    {/each}
 </main>
 
 <style>

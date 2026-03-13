@@ -7,6 +7,10 @@
     import type { State } from './lib/component/FilterButton.svelte';
     import { associate } from './lib/util/misc';
     import CheckButtonGroup from './lib/component/CheckButtonGroup.svelte';
+    
+    const MAIN_MOD_LOADERS = [
+        'fabric', 'forge', 'neoforge'
+    ]
 
     export let facets: Facets = []
     export let tags: TagTypes
@@ -19,10 +23,11 @@
     let clientSide: string
     let selectedVersions: GameVersion[] = []
 
+    let allLoaders = false
     let allVersions = false
     
     $: relevantCategories = selectedProjectType === undefined ? [] : categories.filter(e => e.project_type === selectedProjectType)
-    $: relevantLoaders = selectedProjectType === undefined ? [] : loaders.filter(e => e.supported_project_types.includes(selectedProjectType!))
+    $: relevantLoaders = selectedProjectType === undefined ? [] : loaders.filter(e => e.supported_project_types.includes(selectedProjectType!) && (allLoaders || selectedProjectType !== 'mod' || MAIN_MOD_LOADERS.includes(e.name)))
     $: relevantVersions = allVersions ? versions : versions.filter(e => e.version_type === 'release')
     
     $: categoryFilters = associate(relevantCategories, () => undefined)
@@ -49,6 +54,11 @@
     
     {#if relevantLoaders.length > 1}
         <div>
+                <label>
+                    <input type="checkbox" bind:checked={allLoaders} />
+                    Show all loaders
+                </label>
+            
             <CheckButtonGroup options={relevantLoaders} bind:value={selectedLoaders} let:option>
                 {option.name}
             </CheckButtonGroup>
@@ -56,10 +66,12 @@
     {/if}
     
     <div>
+        Server:
         <ButtonGroup options={sideTypes} bind:value={serverSide} />
     </div>
 
     <div>
+        Client:
         <ButtonGroup options={sideTypes} bind:value={clientSide} />
     </div>
     
