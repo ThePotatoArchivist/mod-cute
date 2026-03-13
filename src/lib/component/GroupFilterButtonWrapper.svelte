@@ -1,4 +1,4 @@
-<script lang="ts", generics="T">
+<script lang="ts" generics="T">
     import { writable, type Writable } from 'svelte/store';
     import type { State } from './FilterButton.svelte';
     import { mapWith } from '../util/misc';

@@ -26,8 +26,11 @@
     let allLoaders = false
     let allVersions = false
     
-    $: relevantCategories = selectedProjectType === undefined ? [] : categories.filter(e => e.project_type === selectedProjectType)
-    $: relevantLoaders = selectedProjectType === undefined ? [] : loaders.filter(e => e.supported_project_types.includes(selectedProjectType!) && (allLoaders || selectedProjectType !== 'mod' || MAIN_MOD_LOADERS.includes(e.name)))
+    $: relevantCategories = selectedProjectType === undefined ? [] : categories.filter(e => e.project_type === selectedProjectType || e.project_type === 'mod' && (selectedProjectType === 'plugin' || selectedProjectType === 'datapack'))
+    $: relevantLoaders = selectedProjectType === undefined ? [] : loaders.filter(e => e.supported_project_types.includes(selectedProjectType!) 
+        && (allLoaders || selectedProjectType !== 'mod' || MAIN_MOD_LOADERS.includes(e.name))
+        && (!e.supported_project_types.includes('plugin') && !e.supported_project_types.includes('datapack') || selectedProjectType !== 'mod')
+    )
     $: relevantVersions = allVersions ? versions : versions.filter(e => e.version_type === 'release')
     
     $: categoryFilters = associate(relevantCategories, () => undefined)

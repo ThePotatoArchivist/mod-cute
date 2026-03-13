@@ -19,7 +19,7 @@
     }
     
     $: count.then(roll)
-    
+
 </script>
 
 <main>
@@ -34,6 +34,10 @@
     <div>
         <button on:click={() => count.then(roll)}>Next</button>
         {#if project !== undefined}
+            {#if project.featured_gallery !== null}
+                <img src={project.featured_gallery} alt="{project.title} gallery image" />
+            {/if}
+            <img src={project.icon_url} alt="{project.title} icon" />
             <a href="https://modrinth.com/project/{project.project_id}">{project.title}</a>
         {/if}
     </div>
