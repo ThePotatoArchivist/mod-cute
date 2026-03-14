@@ -63,6 +63,7 @@
     }
     
     .icon-container {
+        grid-area: icon;
         width: 100%;
         aspect-ratio: 1;
         padding: 1rem;
@@ -79,5 +80,7 @@
         object-fit: cover;
         height: 100%;
         width: 100%;
+        min-width: 100%;
+        min-height: 100%;
     }
 </style>
