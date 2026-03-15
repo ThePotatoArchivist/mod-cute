@@ -8,6 +8,8 @@
 
     export let project: SearchResultHit
     
+    $: imageUrl = project.featured_gallery ?? project.gallery[0]
+    
     let image: HTMLImageElement | undefined
     let pixelated = false
     
@@ -19,10 +21,10 @@
 </script>
 
 <div class="card">
-    {#if project.featured_gallery === null}
+    {#if imageUrl === undefined}
         <div class="banner" style:background-color={color}></div>
     {:else}
-        <img class="banner" src={project.featured_gallery} alt="{project.title} featured gallery" />
+        <img class="banner" src={imageUrl} alt="{project.title} featured gallery" />
     {/if}
     <div class="icon-container">
         <img class="icon" class:pixelated src={project.icon_url} alt="{project.title} icon" bind:this={image} on:load={onImageLoad} />
@@ -34,8 +36,11 @@
             {project.description}
         </p>
         <div>
-            {#each project.display_categories as category (category)}
-                <div class="category">{category}</div>
+            {#each project.display_categories as category}
+                <div class="badge">{category}</div>
+            {/each}
+            {#each project.versions as version}
+                <div class="badge">{version}</div>
             {/each}
         </div>
     </div>
@@ -106,7 +111,7 @@
         min-height: 100%;
     }
     
-    .category {
+    .badge {
         display: inline-block;
         padding: 0.1em 0.5em;
         border-radius: 999px;
