@@ -113,12 +113,14 @@ import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/
 <svelte:window {onmousemove} {onmouseup} {ontouchmove} ontouchend={onmouseup} />
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div bind:this={element} style:translate="{offsetX}px {offsetY}px" {onmousedown} {ontouchstart} out:fade|global={{duration: 250}}>
+<div bind:this={element} style:translate="{offsetX}px {offsetY}px" {onmousedown} {ontouchstart}>
     {@render children()}
 </div>
 
 <style>
     div {
+        position: absolute;
+        inset: 0;
         cursor: grab;
         user-drag: none;
         user-select: none;
