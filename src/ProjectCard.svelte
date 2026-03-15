@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { GameVersion, SearchResultHit } from "@xmcl/modrinth";
     import { toColor } from "./lib/util/misc";
-    import { getProjectUrl } from "./modrinth";
+    import { getProjectUrl, ICON_CACHE } from "./modrinth";
     import type { EventHandler } from "svelte/elements";
     import { areConsecutivePatches } from "./lib/semver";
     
@@ -73,7 +73,15 @@
         </p>
         <div>
             {#each project.display_categories as category}
-                <div class="badge">{category}</div>
+                {@const icon = ICON_CACHE.get(category)}
+                <div class="badge">
+                    {#if icon}
+                        <div class="fit-icon">
+                            {@html icon}
+                        </div>
+                    {/if}
+                    {category}
+                </div>
             {/each}
             {#each displayVersions as version}
                 <div class="badge">{version}</div>
@@ -153,5 +161,11 @@
         border-radius: 999px;
         border: 1px solid gray;
         margin: 0 0.25em;
+    }
+
+    .fit-icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
     }
 </style>
