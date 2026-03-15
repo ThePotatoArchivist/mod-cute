@@ -17,9 +17,9 @@
     <div class="icon-container">
         <img class="icon" src={project.icon_url} alt="{project.title} icon" />
     </div>
-    <h2><a href={getProjectUrl(project.project_id)} target="_blank">{project.title}</a></h2>
+    <h2><a href={getProjectUrl(project.project_id)} target="_blank" on:touchstart|stopPropagation /*prevent swiping*/>{project.title}</a></h2>
     <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="description" on:touchstart|stopPropagation>
+    <div class="description">
         <p>
             {project.description}
         </p>
