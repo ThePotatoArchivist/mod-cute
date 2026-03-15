@@ -59,10 +59,13 @@
 
 <div>
     <FilterButtonGroup bind:values={categoryFilters} let:option>
-        <div class="fit-icon">
-            {@html (option as Category).icon}
-        </div>
-        {(option as Category).name}
+        {@const tOption = option as Category}
+        {#if tOption.icon}
+            <div class="fit-icon">
+                {@html tOption.icon}
+            </div>
+        {/if}
+        {tOption.name}
     </FilterButtonGroup>
 </div>
 

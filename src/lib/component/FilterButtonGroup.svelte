@@ -7,6 +7,8 @@
 
 {#each values.keys() as option (option)}
     <GroupFilterButtonWrapper bind:map={values} key={option}>
-        <slot {option} />
+        <slot {option}>
+            {option}
+        </slot>
     </GroupFilterButtonWrapper>
 {/each}
