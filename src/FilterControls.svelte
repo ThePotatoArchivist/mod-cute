@@ -62,9 +62,8 @@
 <div>
     {#each categoryHeaders.keys() as header (header)}
         {@const categories = categoryHeaders.get(header)!}
-        {@const inHeader = categories.includes.bind(categories)}
         <h3>{header}</h3>
-        <FilterButtonGroup bind:values={categoryFilters} include={inHeader} let:option>
+        <FilterButtonGroup bind:states={categoryFilters} options={categories} let:option>
             {@const tOption = option as Category}
             {#if tOption.icon}
                 <div class="fit-icon">

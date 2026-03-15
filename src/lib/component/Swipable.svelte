@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { onDestroy, onMount, type Snippet } from "svelte";
-    import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/elements";
-    import { fade, fly, type FlyParams, type TransitionConfig } from "svelte/transition";
+    import { onMount, type Snippet } from "svelte";
+    import type { EventHandler, MouseEventHandler } from "svelte/elements";
+    import { fly, type TransitionConfig } from "svelte/transition";
     
     const MIN_SWIPE_MOVEMENT = 5
     const SWIPE_ANIMATION_DISTANCE = 100

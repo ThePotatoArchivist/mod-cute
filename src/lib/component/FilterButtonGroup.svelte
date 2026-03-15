@@ -2,14 +2,14 @@
     import type { SvelteMap } from 'svelte/reactivity';
     import FilterButton, { type State } from './FilterButton.svelte';
 
-    export let values: SvelteMap<T, State>
-    export let include: (value: T) => boolean = () => true
+    export let states: SvelteMap<T, State>
+    export let options: T[] = states.keys().toArray()
 </script>
 
-{#each values.keys().filter(include) as option (option)}
+{#each options as option (option)}
     <FilterButton bind:state={
-        () => values.get(option),
-        value => values = values.set(option, value)
+        () => states.get(option),
+        value => states = states.set(option, value)
     }>
         <slot {option}>
             {option}
