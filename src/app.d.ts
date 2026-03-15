@@ -6,3 +6,5 @@ declare module "@xmcl/modrinth" {
         display_categories: string[]
     }
 }
+
+import '@poppanator/sveltekit-svg/dist/svg.d.ts'

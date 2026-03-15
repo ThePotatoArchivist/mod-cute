@@ -5,6 +5,7 @@
     import { getProjectCount, getProjectUrl, getRandomProject, TAGS } from './modrinth';
     import ProjectCard from './ProjectCard.svelte';
     import Swipable from './lib/component/Swipable.svelte';
+    import { Close, Favorite } from './icons';
     
     let facets: Facets | undefined
     let projectType: string | undefined
@@ -83,6 +84,14 @@
                         {/await}
                     {/key}
                 </div>
+                <div class="buttons">
+                    <button on:click={() => swipable?.swipeLeft()} aria-label="dismiss">
+                        <Close />
+                    </button>
+                    <button on:click={() => swipable?.swipeRight()} aria-label="save">
+                        <Favorite />
+                    </button>
+                </div>
             {/if}
             <details>
                 <summary>Saved Projects</summary>                    
@@ -119,5 +128,14 @@
         padding: 1rem;
         box-sizing: border-box;
         overflow: hidden;
+    }
+    
+    .buttons {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .buttons button {
+        flex-grow: 1;
     }
 </style>
