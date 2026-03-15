@@ -1,2 +1,4 @@
-export { default as Favorite } from './assets/icon/favorite.svg?component'
-export { default as Close } from './assets/icon/close.svg?component'
+export { default as FavoriteIcon } from './assets/icon/favorite.svg?component'
+export { default as CloseIcon } from './assets/icon/close.svg?component'
+export { default as ArrowBackIcon } from './assets/icon/arrow_back.svg?component'
+export { default as FilterIcon } from './assets/icon/filter.svg?component'

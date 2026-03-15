@@ -5,7 +5,7 @@
     import { getProjectCount, getProjectUrl, getRandomProject, TAGS } from './modrinth';
     import ProjectCard from './ProjectCard.svelte';
     import Swipable from './lib/component/Swipable.svelte';
-    import { Close, Favorite } from './icons';
+    import { ArrowBackIcon, CloseIcon, FavoriteIcon, FilterIcon } from './icons';
     
     let facets: Facets | undefined
     let projectType: string | undefined
@@ -55,9 +55,14 @@
             <button on:click={() => {
                 projectType = undefined
                 projectP = undefined
-            }}>All Project Types</button>
-            <details>
-                <summary>Filters</summary>
+            }} aria-label="Back to project types">
+                <ArrowBackIcon />
+            </button>
+            <details open>
+                <summary>
+                    <FilterIcon />
+                    Filters
+                </summary>
                 <FilterControls {tags} bind:facets {projectType} />
             </details>
 
@@ -86,10 +91,10 @@
                 </div>
                 <div class="buttons">
                     <button on:click={() => swipable?.swipeLeft()} aria-label="dismiss">
-                        <Close />
+                        <CloseIcon />
                     </button>
                     <button on:click={() => swipable?.swipeRight()} aria-label="save">
-                        <Favorite />
+                        <FavoriteIcon />
                     </button>
                 </div>
             {/if}
