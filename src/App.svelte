@@ -11,6 +11,7 @@
     let facets: Facets | undefined
     let projectType: string | undefined
     
+    let queueStale = true
     let projectQueue: AsyncIterator<SearchResultHit> | undefined
     let projectP: Promise<SearchResultHit> | undefined
 
@@ -18,9 +19,22 @@
     
     let swipable: Swipable | undefined
     
-    $: count = facets === undefined ? undefined : getProjectCount(facets)
-    
-    $: if (facets !== undefined) count?.then(count => setupQueue(facets!, count))
+    $: if (facets) queueStale = true
+            
+    function showNext() {
+        if (facets === undefined) return
+
+        if (queueStale) {
+            projectP = new Promise(() => {})
+            getProjectCount(facets)
+                .then(count => {
+                    setupQueue(facets!, count)
+                    shiftQueue()
+                })
+            queueStale = false
+        } else
+            shiftQueue()
+    }
     
     function shiftQueue() {
         projectP = projectQueue?.next().then(({value}) => value)
@@ -32,7 +46,6 @@
             projectP = undefined
         } else {
             projectQueue = prequeue(3, () => getRandomProject(facets, count))
-            shiftQueue()
         }
     }
 
@@ -63,6 +76,7 @@
             {/each}
         {:else}
             <button on:click={() => {
+                facets = undefined
                 projectType = undefined
                 projectP = undefined
             }} aria-label="Back to project types">
@@ -76,7 +90,9 @@
                 <FilterControls {tags} bind:facets {projectType} />
             </details>
 
-            {#if projectP !== undefined}
+            {#if projectP === undefined}
+                <button on:click={showNext}>Go</button>
+            {:else}
                 <div class="card-container">
                     {#key projectP}
                         {#await projectP}
@@ -85,11 +101,11 @@
                                 <Swipable
                                     bind:this={swipable}
                                     onSwipeLeft={() => {
-                                        shiftQueue()
+                                        showNext()
                                     }}
                                     onSwipeRight={() => {
                                         savedProjects = [...savedProjects, project]
-                                        shiftQueue()
+                                        showNext()
                                     }}
                                 >
                                     <ProjectCard {project} gameVersions={tags.versions} />
