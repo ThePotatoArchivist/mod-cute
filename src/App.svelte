@@ -1,11 +1,16 @@
 <script lang="ts">
-    import type { SearchResultHit } from '@xmcl/modrinth';
-    import { getProjectUrl, TAGS } from './modrinth';
+    import type { Project, SearchResultHit } from '@xmcl/modrinth';
+    import { getProjectUrl, modrinth, TAGS } from './modrinth';
     import ProjectBrowser from './ProjectBrowser.svelte';
+    import { localStore } from './lib/util/localStore';
         
     let projectType: string | undefined
-    let savedProjects: SearchResultHit[] = []
+    let savedProjects: (SearchResultHit & {id: string} | Project)[] = []
+    let savedProjectIds = localStore<string[]>("saved_projects", [])
     
+    modrinth.getProjects($savedProjectIds).then(projects =>
+        savedProjects = [...projects, ...savedProjects]
+    )
 </script>
 
 <main>
@@ -21,7 +26,10 @@
                 {projectType} 
                 {tags} 
                 on:exit={() => projectType = undefined} 
-                on:save={({detail: project}) => savedProjects = [...savedProjects, project]}
+                on:save={({detail: project}) => {
+                    savedProjects = [...savedProjects, {...project, id: project.project_id}]
+                    $savedProjectIds = [...$savedProjectIds, project.project_id]
+                }}
             />
         {/if}
 
@@ -29,7 +37,7 @@
             <summary>Saved Projects</summary>                    
             <ul>
                 {#each savedProjects as savedProject}
-                    <li><a href={getProjectUrl(savedProject.project_id)}>{savedProject.title}</a></li>
+                    <li><a href={getProjectUrl(savedProject.id)}>{savedProject.title}</a></li>
                 {/each}
             </ul>
         </details>
