@@ -91,7 +91,7 @@
                 </div>
             {/each}
             {#each displayVersions as version}
-                <div class="badge">{text(version)}</div>
+                <div class="badge">{version}</div>
             {/each}
         </div>
     </div>
