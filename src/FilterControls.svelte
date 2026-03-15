@@ -7,6 +7,7 @@
     import { associate, groupby } from './lib/util/misc';
     import CheckButtonGroup from './lib/component/CheckButtonGroup.svelte';
     import { SvelteMap } from 'svelte/reactivity';
+    import { text } from './text';
     
     const MAIN_MOD_LOADERS = [ 'fabric', 'forge', 'neoforge' ]
     
@@ -62,7 +63,7 @@
 <div>
     {#each categoryHeaders.keys() as header (header)}
         {@const categories = categoryHeaders.get(header)!}
-        <h3>{header}</h3>
+        <h3>{text(header)}</h3>
         <FilterButtonGroup bind:states={categoryFilters} options={categories} let:option>
             {@const tOption = option as Category}
             {#if tOption.icon}
@@ -70,7 +71,7 @@
                     {@html tOption.icon}
                 </div>
             {/if}
-            {tOption.name}
+            {text(tOption.name)}
         </FilterButtonGroup>
     {/each}
 </div>
@@ -86,7 +87,7 @@
             <div class="fit-icon">
                 {@html option.icon}
             </div>
-            {option.name}
+            {text(option.name)}
         </CheckButtonGroup>
     </div>
 {/if}

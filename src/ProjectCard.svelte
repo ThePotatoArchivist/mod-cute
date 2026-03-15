@@ -5,6 +5,7 @@
     import type { EventHandler } from "svelte/elements";
     import { areConsecutivePatches } from "./lib/semver";
     import { OpenNewIcon } from "./icons";
+    import { text } from "./text";
     
     const MAX_PIXELATED_IMAGE_WIDTH = 64
 
@@ -86,11 +87,11 @@
                             {@html icon}
                         </div>
                     {/if}
-                    {category}
+                    {text(category)}
                 </div>
             {/each}
             {#each displayVersions as version}
-                <div class="badge">{version}</div>
+                <div class="badge">{text(version)}</div>
             {/each}
         </div>
     </div>

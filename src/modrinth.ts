@@ -25,7 +25,8 @@ export const ICON_CACHE = new Map<string, string>()
 
 TAGS.then(({categories, loaders}) => {
     for (const category of categories)
-        ICON_CACHE.set(category.name, category.icon)
+        if (category.project_type !== 'server')
+            ICON_CACHE.set(category.name, category.icon)
     for (const loader of loaders)
         ICON_CACHE.set(loader.name, loader.icon)
 })

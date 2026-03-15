@@ -3,6 +3,7 @@
     import { getProjectUrl, modrinth, TAGS } from './modrinth';
     import ProjectBrowser from './ProjectBrowser.svelte';
     import { localStore } from './lib/util/localStore';
+    import { text } from './text';
         
     let projectType: string | undefined
     let savedProjects: (SearchResultHit & {id: string} | Project)[] = []
@@ -19,7 +20,7 @@
     {:then tags} 
         {#if projectType === undefined}
             {#each tags.projectTypes as type (type)}
-                <button on:click={() => projectType = type}>{type}</button>
+                <button on:click={() => projectType = type}>{text(type)}</button>
             {/each}
         {:else}
             <ProjectBrowser 
