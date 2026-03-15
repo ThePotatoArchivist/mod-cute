@@ -5,8 +5,6 @@
     export let project: SearchResultHit
     
     $: color = toColor(propertyCast<number>(project, 'color'))
-    
-    $: console.log(color)
 </script>
 
 <div class="card">
@@ -33,8 +31,8 @@
 
 <style>
     .card {
-        height: 60rem;
-        width: 40rem;
+        height: 45rem;
+        width: 30rem;
         display: grid;
         grid-template-columns: 1fr 3fr;
         grid-template-rows: 2fr auto 3fr;

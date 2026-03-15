@@ -4,12 +4,14 @@
     import { type Facets } from './lib/modrinth/facets';
     import { getProjectCount, getRandomProject, TAGS } from './modrinth';
     import ProjectCard from './ProjectCard.svelte';
+    import Swipable from './lib/component/Swipable.svelte';
     
     let facets: Facets | undefined
     let projectType: string | undefined
     
     let rolling = false
     let project: SearchResultHit | undefined
+    let savedProjects: SearchResultHit[] = []
     
     $: count = facets === undefined ? Promise.resolve(0) : getProjectCount(facets)
     
@@ -38,10 +40,23 @@
             </details>
 
             <div>
-                {#if project !== undefined}
-                    <ProjectCard {project} />
-                {/if}
+                {#if project !== undefined}{#key project}
+                    <Swipable
+                        onSwipeLeft={() => count.then(roll)}
+                        onSwipeRight={() => {
+                            savedProjects = [...savedProjects, project!]
+                            count.then(roll)
+                        }}
+                    >
+                        <ProjectCard {project} />
+                    </Swipable>
+                {/key}{/if}
                 <button on:click={() => count.then(roll)}>Next</button>
+                <ul>
+                    {#each savedProjects as savedProject}
+                        <li>{savedProject.title}</li>
+                    {/each}
+                </ul>
             </div>
         {/if}
     {/await}
