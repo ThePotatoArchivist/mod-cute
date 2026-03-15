@@ -71,7 +71,7 @@
         <p>
             {project.description}
         </p>
-        <div>
+        <div class="badges">
             {#each project.display_categories as category}
                 {@const icon = ICON_CACHE.get(category)}
                 <div class="badge">
@@ -155,12 +155,18 @@
         min-height: 100%;
     }
     
+    .badges {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+    
     .badge {
         display: inline-block;
-        padding: 0.1em 0.5em;
+        padding: 0.1rem 0.5em;
         border-radius: 999px;
         border: 1px solid gray;
-        margin: 0 0.25em;
     }
 
     .fit-icon {
