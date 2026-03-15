@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, type Snippet } from "svelte";
+    import { onDestroy, onMount, type Snippet } from "svelte";
     import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/elements";
     import { fade, fly, type FlyParams, type TransitionConfig } from "svelte/transition";
     
@@ -44,7 +44,7 @@
         event.preventDefault()
     }
     
-    const ontouchstart: TouchEventHandler<HTMLElement> = event => {
+    const ontouchstart = (event: TouchEvent) => {
         const touch = event.touches.item(0)
         if (touch === null) return
         lastTouchX = touch.screenX
@@ -60,7 +60,7 @@
         event.preventDefault()
     }
     
-    const ontouchmove: TouchEventHandler<Window> = event => {
+    const ontouchmove = (event: TouchEvent) => {
         if (!dragged) return
         const touch = event.touches.item(0)
         if (touch === null) return
@@ -92,12 +92,18 @@
         }
         event.preventDefault()
     }
+    
+    onMount(() => {
+        element.addEventListener('touchstart', ontouchstart, {passive: false})
+        window.addEventListener('touchmove', ontouchmove, {passive: false})
+        return () => window.removeEventListener('touchmove', ontouchmove)
+    })
 </script>
 
-<svelte:window {onmousemove} {onmouseup} {ontouchmove} ontouchend={onmouseup} ontouchcancel={onmouseup} />
+<svelte:window {onmousemove} {onmouseup} ontouchend={onmouseup} />
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div bind:this={element} style:translate="{offsetX}px {offsetY}px" class:dragged {onmousedown} {ontouchstart} out:animation|global>
+<div bind:this={element} style:translate="{offsetX}px {offsetY}px" class:dragged {onmousedown} out:animation|global>
     {@render children()}
 </div>
 
