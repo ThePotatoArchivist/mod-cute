@@ -81,6 +81,7 @@
         width: 100%;
         display: block;
         aspect-ratio: 1;
+        object-fit: contain;
     }
     
     img.banner {

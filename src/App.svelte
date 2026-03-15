@@ -10,7 +10,7 @@
     let projectType: string | undefined
     
     let rolling = false
-    let project: SearchResultHit | undefined
+    let projectP: Promise<SearchResultHit> | undefined
     let savedProjects: SearchResultHit[] = []
     
     $: count = facets === undefined ? Promise.resolve(0) : getProjectCount(facets)
@@ -18,7 +18,8 @@
     async function roll(count: number) {
         if (facets === undefined || rolling) return
         rolling = true
-        project = await getRandomProject(facets, count)
+        projectP = getRandomProject(facets, count)
+        await projectP
         rolling = false
     }
 
@@ -35,28 +36,34 @@
         {:else}
             <button on:click={() => {
                 projectType = undefined
-                project = undefined
+                projectP = undefined
             }}>All Project Types</button>
             <details>
                 <summary>Filters</summary>
                 <FilterControls {tags} bind:facets {projectType} />
             </details>
 
-            {#if project === undefined}
+            {#if projectP === undefined}
                 <button on:click={() => count.then(roll)}>Go</button>
             {:else}
                 <div class="card-container">
-                    {#key project}
-                        <Swipable
-                            onSwipeLeft={() => count.then(roll)}
-                            onSwipeRight={() => {
-                                savedProjects = [...savedProjects, project!]
-                                count.then(roll)
-                            }}
-                        >
-                            <ProjectCard {project} />
-                        </Swipable>
-                    {/key}
+                    {#await projectP}
+                        Loading...
+                    {:then project} 
+                        {#key project}
+                            <Swipable
+                                onSwipeLeft={() => {
+                                    count.then(roll)
+                                }}
+                                onSwipeRight={() => {
+                                    savedProjects = [...savedProjects, project]
+                                    count.then(roll)
+                                }}
+                            >
+                                <ProjectCard {project} />
+                            </Swipable>
+                        {/key}
+                    {/await}
                 </div>
             {/if}
             <details>

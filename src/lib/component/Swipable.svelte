@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onDestroy, type Snippet } from "svelte";
-import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/elements";
-    import { fade } from "svelte/transition";
+    import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/elements";
+    import { fade, fly, type FlyParams, type TransitionConfig } from "svelte/transition";
     
     const MIN_SWIPE_MOVEMENT = 5
-    const MIN_SWIPE_ANIMATION_SPEED = 3
-    const SWIPE_MARGIN = 0.25
+    const SWIPE_ANIMATION_DISTANCE = 100
+    const SWIPE_MARGIN = 0.5
 
     const { onSwipe, onSwipeLeft, onSwipeRight, children }: {
         onSwipe?: () => void
@@ -22,37 +22,21 @@ import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/
     let lastTouchY = 0
     let element: HTMLDivElement
 
-    let animateCallback: number | undefined
-    let lastFrameTime: number | undefined
-    
-    function animate() {
-        animateCallback = requestAnimationFrame(time => {
-            const deltaTime = lastFrameTime === undefined ? 0 : time - lastFrameTime
-            lastFrameTime = time
-            
-            offsetX += movementX * deltaTime
-
-            animate()
-        })        
+    let swipeDirection: number | undefined
+    function animation(node: Element): TransitionConfig {
+        return swipeDirection ? fly(node, {duration: 1000, x: swipeDirection}) : {duration: 0}
     }
     
-    onDestroy(() => {
-        if (animateCallback !== undefined) 
-            cancelAnimationFrame(animateCallback)
-    })
-
     function swipeLeft() {
+        swipeDirection = -SWIPE_ANIMATION_DISTANCE
         onSwipe?.()
         onSwipeLeft?.()
-        movementX = -MIN_SWIPE_ANIMATION_SPEED
-        animate()
     }
     
     function swipeRight() {
+        swipeDirection = SWIPE_ANIMATION_DISTANCE
         onSwipe?.()
         onSwipeRight?.()
-        movementX = MIN_SWIPE_ANIMATION_SPEED
-        animate()
     }
     
     const onmousedown: MouseEventHandler<HTMLElement> = event => {
@@ -113,7 +97,7 @@ import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/
 <svelte:window {onmousemove} {onmouseup} {ontouchmove} ontouchend={onmouseup} />
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div bind:this={element} style:translate="{offsetX}px {offsetY}px" {onmousedown} {ontouchstart}>
+<div bind:this={element} style:translate="{offsetX}px {offsetY}px" {onmousedown} {ontouchstart} out:animation|global>
     {@render children()}
 </div>
 
