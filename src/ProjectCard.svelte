@@ -12,7 +12,6 @@
     let pixelated = false
     
     const onImageLoad: EventHandler = event => {
-        console.log(image)
         pixelated = image !== undefined && image.naturalHeight <= MAX_PIXELATED_IMAGE_WIDTH && image.naturalHeight <= MAX_PIXELATED_IMAGE_WIDTH
     }
     
@@ -34,11 +33,11 @@
         <p>
             {project.description}
         </p>
-        <ul>
+        <div>
             {#each project.display_categories as category (category)}
-                <li>{category}</li>
+                <div class="category">{category}</div>
             {/each}
-        </ul>
+        </div>
     </div>
 </div>
 
@@ -48,7 +47,7 @@
         width: 100%;
         display: grid;
         grid-template-columns: 1fr 3fr;
-        grid-template-rows: 2fr auto 3fr;
+        grid-template-rows: 3fr auto 2fr;
         grid-template-areas: 
             'banner banner'
             'icon name'
@@ -105,5 +104,13 @@
         width: 100%;
         min-width: 100%;
         min-height: 100%;
+    }
+    
+    .category {
+        display: inline-block;
+        padding: 0.1em 0.5em;
+        border-radius: 999px;
+        border: 1px solid gray;
+        margin: 0 0.25em;
     }
 </style>
