@@ -40,7 +40,9 @@
             </details>
 
             <div>
-                {#if project !== undefined}{#key project}
+                {#if project === undefined}
+                    <button on:click={() => count.then(roll)}>Go</button>
+                {:else}{#key project}
                     <Swipable
                         onSwipeLeft={() => count.then(roll)}
                         onSwipeRight={() => {
@@ -51,12 +53,14 @@
                         <ProjectCard {project} />
                     </Swipable>
                 {/key}{/if}
-                <button on:click={() => count.then(roll)}>Next</button>
-                <ul>
-                    {#each savedProjects as savedProject}
-                        <li>{savedProject.title}</li>
-                    {/each}
-                </ul>
+                <details>
+                    <summary>Saved Projects</summary>
+                    <ul>
+                        {#each savedProjects as savedProject}
+                            <li>{savedProject.title}</li>
+                        {/each}
+                    </ul>
+                </details>
             </div>
         {/if}
     {/await}

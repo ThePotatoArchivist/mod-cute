@@ -15,9 +15,9 @@
 
 body {
   margin: 0;
-  display: flex;
+  display: grid;
   place-items: center;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 #app {

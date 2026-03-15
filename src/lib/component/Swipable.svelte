@@ -4,7 +4,7 @@ import type { MouseEventHandler } from "svelte/elements";
     import { fade } from "svelte/transition";
     
     const MIN_SWIPE_MOVEMENT = 5
-    const MIN_SWIPE_ANIMATION_SPEED = 1
+    const MIN_SWIPE_ANIMATION_SPEED = 3
     const SWIPE_MARGIN = 0.25
 
     const { onSwipe, onSwipeLeft, onSwipeRight, children }: {
@@ -92,7 +92,9 @@ import type { MouseEventHandler } from "svelte/elements";
 <style>
     div {
         cursor: grab;
+        user-drag: none;
         user-select: none;
+        -webkit-user-drag: none;
     }
     
     div:active {
