@@ -4,7 +4,7 @@
     import type { Category, GameVersion, Loader } from '@xmcl/modrinth';
     import FilterButtonGroup from './lib/component/FilterButtonGroup.svelte';
     import type { State } from './lib/component/FilterButton.svelte';
-    import { associate } from './lib/util/misc';
+    import { associate, groupby } from './lib/util/misc';
     import CheckButtonGroup from './lib/component/CheckButtonGroup.svelte';
     
     const MAIN_MOD_LOADERS = [ 'fabric', 'forge', 'neoforge' ]
@@ -33,6 +33,7 @@
     $: relevantVersions = allVersions ? versions : versions.filter(e => e.version_type === 'release')
     
     $: categoryFilters = associate(relevantCategories, () => undefined)
+    $: categoryHeaders = groupby(relevantCategories, category => category.header)
     
     $: facets = [
         [facet('project_type', projectType)],
@@ -58,15 +59,20 @@
 </script>
 
 <div>
-    <FilterButtonGroup bind:values={categoryFilters} let:option>
-        {@const tOption = option as Category}
-        {#if tOption.icon}
-            <div class="fit-icon">
-                {@html tOption.icon}
-            </div>
-        {/if}
-        {tOption.name}
-    </FilterButtonGroup>
+    {#each categoryHeaders.keys() as header (header)}
+        {@const categories = categoryHeaders.get(header)!}
+        {@const inHeader = categories.includes.bind(categories)}
+        <h3>{header}</h3>
+        <FilterButtonGroup bind:values={categoryFilters} include={inHeader} let:option>
+            {@const tOption = option as Category}
+            {#if tOption.icon}
+                <div class="fit-icon">
+                    {@html tOption.icon}
+                </div>
+            {/if}
+            {tOption.name}
+        </FilterButtonGroup>
+    {/each}
 </div>
 
 {#if relevantLoaders.length > 1}

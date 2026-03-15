@@ -3,12 +3,15 @@
     import GroupFilterButtonWrapper from './GroupFilterButtonWrapper.svelte';
 
     export let values: Map<T, State>
+    export let include: (value: T) => boolean = () => true
 </script>
 
 {#each values.keys() as option (option)}
-    <GroupFilterButtonWrapper bind:map={values} key={option}>
-        <slot {option}>
-            {option}
-        </slot>
-    </GroupFilterButtonWrapper>
+    {#if include(option)}
+        <GroupFilterButtonWrapper bind:map={values} key={option}>
+            <slot {option}>
+                {option}
+            </slot>
+        </GroupFilterButtonWrapper>
+    {/if}
 {/each}
