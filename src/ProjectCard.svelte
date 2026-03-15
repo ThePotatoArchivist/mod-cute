@@ -16,7 +16,7 @@
     <div class="icon-container">
         <img class="icon" src={project.icon_url} alt="{project.title} icon" />
     </div>
-    <h2><a href="https://modrinth.com/project/{project.project_id}" target="_blank">{project.title}</a></h2>
+    <h2><a href="https://modrinth.com/project/{project.project_id}" target="_blank" on:touchstart|stopPropagation /*prevent swiping*/>{project.title}</a></h2>
     <div class="description">
         <p>
             {project.description}

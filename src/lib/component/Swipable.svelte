@@ -55,7 +55,7 @@ import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/
         animate()
     }
     
-    const onmousedown: EventHandler<Event, HTMLElement> = event => {
+    const onmousedown: MouseEventHandler<HTMLElement> = event => {
         dragged = true
         event.preventDefault()
     }
@@ -65,7 +65,8 @@ import type { EventHandler, MouseEventHandler, TouchEventHandler } from "svelte/
         if (touch === null) return
         lastTouchX = touch.screenX
         lastTouchY = touch.screenY
-        onmousedown(event)
+        dragged = true
+        event.preventDefault()
     }
     
     const onmousemove: MouseEventHandler<Window> = event => {
