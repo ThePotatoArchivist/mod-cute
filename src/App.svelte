@@ -6,7 +6,7 @@
     import { text } from './text';
     import PopupButton from './lib/component/PopupButton.svelte';
     import SavedFilters from './SavedFilters.svelte';
-    import { ArrowBackIcon } from './icons';
+    import { ArrowBackIcon, HistoryIcon } from './icons';
         
     let projectType: string | undefined
     let savedProjects: (SearchResultHit & {id: string} | Project)[] = []
@@ -47,8 +47,8 @@
                         <ArrowBackIcon />
                     </button>
 
-                    <PopupButton slot="buttons-right">
-                        <svelte:fragment slot="button">Saved Projects</svelte:fragment>
+                    <PopupButton slot="buttons-right" aria-label="Saved Projects">
+                        <HistoryIcon slot="button" />
 
                         <ul>
                             {#each savedProjects as savedProject}
