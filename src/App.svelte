@@ -33,11 +33,11 @@
 
             <p class="disclaimer">Accesses content from <a href="https://modrinth.com">modrinth.com</a>. NOT APPROVED BY OR ASSOCIATED WITH MODRINTH, RINTH INC., MINECRAFT, OR MOJANG</p>
         {:else}
-            <SavedFilters {tags} {projectType} let:filters>
+            <SavedFilters {tags} {projectType} let:getFilters let:setFilters>
                 <ProjectBrowser 
                     {projectType} 
                     {tags} 
-                    {filters}
+                    bind:filters={getFilters, setFilters}
                     on:save={({detail: project}) => {
                         savedProjects = [...savedProjects, {...project, id: project.project_id}]
                         $savedProjectIds = [...$savedProjectIds, project.project_id]

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { emptyFilters } from "./lib/modrinth/filters";
+    import { emptyFilters, type Filters } from "./lib/modrinth/filters";
     import { deserializeFilterSet, serializeFilterSet, type FilterSet, type SerializedFilterSet } from "./lib/modrinth/filter-serialization";
     import { localStoreCustom } from "./lib/util/localStore";
     import type { TagTypes } from "./modrinth";
@@ -13,9 +13,14 @@
         serializeFilterSet,
         deserializeFilterSet(tags),
     )
+
+    function getFilters() {
+        return $savedFilters[projectType] ?? emptyFilters()
+    }
     
-    $: if (!(projectType in $savedFilters))
-        $savedFilters[projectType] = emptyFilters()
+    function setFilters(filters: Filters) {
+        $savedFilters[projectType] = filters
+    }
 </script>
 
-<slot filters={$savedFilters[projectType]} />
+<slot {getFilters} {setFilters} />
