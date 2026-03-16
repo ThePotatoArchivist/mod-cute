@@ -1,6 +1,7 @@
 import { ModrinthV2Client, type SearchResult } from '@xmcl/modrinth'
 import { getProjectTypeTags } from './lib/modrinth/tags'
 import { type Facets, compileFacets } from './lib/modrinth/facets'
+import { associateBy, groupby, transformValue } from './lib/util/misc'
 
 export const modrinth = new ModrinthV2Client({
     headers: {
@@ -16,7 +17,13 @@ export const TAGS = (async () => {
         getProjectTypeTags(modrinth),
         // getSideTypeTags(modrinth),
     ])
-    return { categories, versions, loaders, projectTypes }
+    return { categories, versions, loaders, projectTypes,
+        categoriesByNameByType: new Map(groupby(categories, category => category.project_type)
+            .entries()
+            .map(transformValue(categories => associateBy(categories, category => category.name)))),
+        loadersByName: associateBy(loaders, loader => loader.name),
+        versionsByName: associateBy(versions, version => version.version)
+    }
 })()
 
 export type TagTypes = Awaited<typeof TAGS>

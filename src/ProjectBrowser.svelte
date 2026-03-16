@@ -9,12 +9,12 @@
     import { prequeue } from './lib/util/prequeue';
     import { createEventDispatcher } from 'svelte';
     import PopupButton from './lib/component/PopupButton.svelte';
-    import { compileFilters, emptyFilters, type Filters } from './lib/modrinth/filters';
-
+    import { compileFilters, emptyFilters, type Filters, type SerializedFilters } from './lib/modrinth/filters';
+    
     export let projectType: string
     export let tags: TagTypes
     
-    export let filters: Filters = emptyFilters()
+    export let filters = emptyFilters()
     
     let projectQueue: AsyncIterator<SearchResultHit> | undefined
     let projectP: Promise<SearchResultHit> | undefined
@@ -73,7 +73,7 @@
     <ArrowBackIcon />
 </button>
 
-<PopupButton>
+<PopupButton open>
     <svelte:fragment slot="button">
         <FilterIcon />
         Filters

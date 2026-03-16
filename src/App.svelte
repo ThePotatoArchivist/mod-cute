@@ -5,6 +5,7 @@
     import { localStore } from './lib/util/localStore';
     import { text } from './text';
     import PopupButton from './lib/component/PopupButton.svelte';
+    import SavedFilters from './SavedFilters.svelte';
         
     let projectType: string | undefined
     let savedProjects: (SearchResultHit & {id: string} | Project)[] = []
@@ -25,15 +26,18 @@
                 <button on:click={() => projectType = type}>{text(type)}</button>
             {/each}
         {:else}
-            <ProjectBrowser 
-                {projectType} 
-                {tags} 
-                on:exit={() => projectType = undefined} 
-                on:save={({detail: project}) => {
-                    savedProjects = [...savedProjects, {...project, id: project.project_id}]
-                    $savedProjectIds = [...$savedProjectIds, project.project_id]
-                }}
-            />
+            <SavedFilters {tags} {projectType} let:filters>
+                <ProjectBrowser 
+                    {projectType} 
+                    {tags} 
+                    {filters}
+                    on:exit={() => projectType = undefined} 
+                    on:save={({detail: project}) => {
+                        savedProjects = [...savedProjects, {...project, id: project.project_id}]
+                        $savedProjectIds = [...$savedProjectIds, project.project_id]
+                    }}
+                />
+            </SavedFilters>
         {/if}
 
         <PopupButton>

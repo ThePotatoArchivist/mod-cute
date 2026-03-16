@@ -3,7 +3,7 @@
     import { toColor } from "./lib/util/misc";
     import { getProjectUrl, ICON_CACHE } from "./modrinth";
     import type { EventHandler } from "svelte/elements";
-    import { areConsecutivePatches } from "./lib/semver";
+    import { areConsecutivePatches } from "./lib/util/semver";
     import { OpenNewIcon } from "./icons";
     import { text } from "./text";
     
